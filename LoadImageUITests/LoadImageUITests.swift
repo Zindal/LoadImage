@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import LoadImage
 
 class LoadImageUITests: XCTestCase {
         
@@ -31,6 +32,13 @@ class LoadImageUITests: XCTestCase {
     func testExample() {
         // Use recording to get started writing UI tests.
         // Use XCTAssert and related functions to verify your tests produce the correct results.
+    }
+    
+    func testNullString()
+    {
+       let inputStr = NSString()
+       let resultString = Helper.sharedHelper.checkNullString(str:inputStr) as NSString
+       XCTAssert(resultString == "", "String is nil")
     }
     
 }
