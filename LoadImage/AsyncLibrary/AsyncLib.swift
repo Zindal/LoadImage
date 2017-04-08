@@ -1,5 +1,4 @@
 
-
 import Foundation
 import UIKit
 
@@ -18,7 +17,7 @@ extension UIImageView
         }else{
             
             self.image = placeholderImg
-
+            
             let request = NSMutableURLRequest(url: url as URL,
                                               cachePolicy: .useProtocolCachePolicy,
                                               timeoutInterval: 10.0)
@@ -26,31 +25,31 @@ extension UIImageView
             let session = URLSession.shared
             let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
                 
-                if let data = try? Data(contentsOf: url as URL){
+                DispatchQueue.main.async(execute: { () -> Void in
                     
-                    DispatchQueue.main.async(execute: { () -> Void in
-
-                        let img:UIImage! = UIImage(data: data)
+                    if data != nil
+                    {
+                        let img:UIImage! = UIImage(data: data!)
                         self.image = img
-                        
-                        if animate
-                        {
-                            self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-                            UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
-                                self.transform = CGAffineTransform.identity
-                            }, completion: { (finished) in
-                            })
-                        }
-
                         if img != nil{
                             cache.setObject(img, forKey: url)
                         }
-                        
-                    })
-                }
+                    }
+                    
+                    if animate
+                    {
+                        self.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+                        UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseOut, animations: {
+                            self.transform = CGAffineTransform.identity
+                        }, completion: { (finished) in
+                            
+                        })
+                    }
+                    
+                })
             })
             dataTask.resume()
-         }
+        }
     }
-
+    
 }
